@@ -20,10 +20,19 @@ const StackNavigator = () => (
 
 const DrawerNavigator = () => (
   <NavigationContainer>
-    <Drawer.Navigator drawerContent={(props) => <CustomDrawerContent {...props} />}>
+    <Drawer.Navigator
+      initialRouteName="Home"
+      drawerContent={(props) => <CustomDrawerContent {...props}
+        drawerContentOptions={{
+          activeTintColor: '#e91e63',
+          itemStyle: { marginVertical: 15, color: 'red' },
+          backgroundColor: 'red',
+          width: 2000,
+        }}
+      />}>
       <Drawer.Screen name="Home" component={StackNavigator} options={{ title: 'ZAMARA APP' }} />
     </Drawer.Navigator>
-  </NavigationContainer>
+  </NavigationContainer >
 );
 
 export default DrawerNavigator;
