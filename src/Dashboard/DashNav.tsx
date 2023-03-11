@@ -21,7 +21,7 @@ const StackNavigator = () => (
 const DrawerNavigator = () => (
   <NavigationContainer>
     <Drawer.Navigator drawerContent={(props) => <CustomDrawerContent {...props} />}>
-      <Drawer.Screen name="Home" component={StackNavigator} />
+      <Drawer.Screen name="Home" component={StackNavigator} options={{ title: 'ZAMARA APP' }} />
     </Drawer.Navigator>
   </NavigationContainer>
 );

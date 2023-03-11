@@ -9,6 +9,10 @@ const CustomDrawerContent = (props: any) => {
     alert("You logout here")
   };
 
+  const handleHomeScreen = () => {
+    navigation.navigate("Home")
+  };
+
   const handleStaffScreen = () => {
     navigation.navigate("Staff")
   };
@@ -20,6 +24,10 @@ const CustomDrawerContent = (props: any) => {
   return (
     <DrawerContentScrollView {...props}>
       <DrawerItemList {...props} />
+      <DrawerItem
+        label="HOME"
+        onPress={handleHomeScreen}
+      />
       <DrawerItem
         label="STAFF"
         onPress={handleStaffScreen}
