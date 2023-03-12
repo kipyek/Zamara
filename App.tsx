@@ -1,11 +1,13 @@
-import { StatusBar } from 'expo-status-bar';
+import { NavigationContainer } from '@react-navigation/native';
 import { StyleSheet, Text, View } from 'react-native';
-import DashNav from './src/Dashboard/DashNav';
-import Home from './src/Dashboard/Home';
+import Login from './src/Authentication/Login';
+import Routes from './src/Routes';
 
 export default function App() {
   return (
-    <DashNav />
+    <NavigationContainer>
+      <Login />
+    </NavigationContainer>
   );
 }
 

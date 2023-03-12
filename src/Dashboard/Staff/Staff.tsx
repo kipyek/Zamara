@@ -36,6 +36,7 @@ export default function Staff() {
         data={staff}
         renderItem={renderStaff}
         keyExtractor={(item) => item.staffNumber.toString()}
+
       />
     </View>
   );
