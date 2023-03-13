@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, Image } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Menu, MenuItem, MenuDivider } from 'react-native-material-menu';
 import { MaterialIcons } from "@expo/vector-icons"
 import { CommonActions } from '@react-navigation/native';
@@ -8,6 +8,18 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const Home = ({ route, navigation }: any) => {
   // const { item } = route.params
   const [visible, setVisible] = useState(false);
+  const [token, setToken] = useState(null)
+
+  useEffect(() => {
+    AsyncStorage.getItem('activeUser').then(value => {
+      let parsed = JSON.parse(value);
+      setToken(parsed.token);
+    }).catch(error => {
+      console.log(error)
+    }).catch(error => {
+      console.log(error)
+    })
+  }, []);
 
   const hideMenu = () => setVisible(false);
 
