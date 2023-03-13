@@ -1,9 +1,11 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { CommonActions, useNavigation } from '@react-navigation/native';
+import { CommonActions } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Dimensions, TextInput, Button } from 'react-native';
+import { View, Text, StyleSheet, TextInput, Button } from 'react-native';
+import { AuthNavigationProps } from '../../Components/Navigation';
+import axios from 'axios';
 
-const Login = ({ navigation }: any) => {
+const Login = ({ navigation }: AuthNavigationProps<"Login">) => {
   const [data, setData] = useState(null)
   const [userData, setUserData] = useState([])
   const [name, setName] = useState('')
@@ -33,18 +35,30 @@ const Login = ({ navigation }: any) => {
   }, [data]);
 
   const loginApi = () => {
-    fetch('https://dummyjson.com/auth/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        username: name,
-        password: password,
+    let payload = {
+      username: name,
+      password: password
+    }
+
+    axios.post('https://dummyjson.com/auth/login', payload)
+      .then(response => {
+        const data = response.data
+        AsyncStorage.setItem('activeUser', JSON.stringify(data))
+        AsyncStorage.setItem('activeUsers', JSON.stringify(userData))
+        navigation.dispatch(CommonActions.reset({
+          index: 0,
+          routes: [
+            {
+              name: 'Home',
+              params: { item: userData }
+            },
+          ],
+        }))
       })
-    })
-      .then(res => res.json())
-      .then(
-        setData
-      );
+      .catch((error: any) => {
+        console.log(error)
+
+      })
   }
 
 

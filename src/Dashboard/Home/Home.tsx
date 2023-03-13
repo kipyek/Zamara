@@ -1,14 +1,65 @@
 import { StyleSheet, Text, View, Image } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
+import { Menu, MenuItem, MenuDivider } from 'react-native-material-menu';
+import { MaterialIcons } from "@expo/vector-icons"
+import { CommonActions } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const Home = () => {
+const Home = ({ route, navigation }: any) => {
+  // const { item } = route.params
+  const [visible, setVisible] = useState(false);
+
+  const hideMenu = () => setVisible(false);
+
+  const showMenu = () => setVisible(true);
+  const staff = () => {
+    navigation.navigate("Staff");
+    hideMenu()
+  }
+  const continent = () => {
+    navigation.navigate("Continents");
+    hideMenu()
+  }
+
+  const signOut = () => {
+    try {
+      AsyncStorage.clear()
+      navigation.dispatch(CommonActions.reset({
+        index: 0,
+        routes: [
+          { name: 'Authentication' },
+        ],
+      }))
+      console.log("Sign Out", "You have successfully signed out")
+    } catch (e) {
+      console.log("Sign Out", "Please Try again later")
+    }
+  }
+
   return (
     <View style={styles.container}>
+      <View style={{ alignItems: 'flex-start', justifyContent: 'flex-start' }}>
+        <Menu
+          visible={visible}
+          onRequestClose={hideMenu}
+          style={{ marginTop: 50 }}
+        >
+          <MenuItem onPress={() => hideMenu()}>HOME</MenuItem>
+          <MenuItem onPress={() => staff()} >STAFF</MenuItem>
+          <MenuItem onPress={() => continent()}>CONTINENTS</MenuItem>
+          <MenuItem onPress={() => signOut()}>SIGN OUT</MenuItem>
+        </Menu>
+      </View>
+      <View style={{ backgroundColor: '#FFA500', paddingVertical: 20, flexDirection: 'row' }}>
+        <MaterialIcons name="menu" size={24} color="white" onPress={() => showMenu()} style={{ marginLeft: 20 }} />
+        <Text style={{ fontSize: 18, fontWeight: 'bold', color: 'white', marginLeft: 10 }} >ZAMARA APP</Text>
+      </View>
       <Image
         source={cartoon[0]}
         style={{
           width: 80,
           height: 80,
+          marginTop: 80,
           position: 'absolute',
           alignSelf: 'flex-end',
         }} />
@@ -75,6 +126,7 @@ const cartoon = [require("../../../assets/Zamara.png")]
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    marginTop: 24
   },
   content: {
     alignItems: 'center',
