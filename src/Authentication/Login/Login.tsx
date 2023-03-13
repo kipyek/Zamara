@@ -6,7 +6,7 @@ import { AuthNavigationProps } from '../../Components/Navigation';
 import axios from 'axios';
 
 const Login = ({ navigation }: AuthNavigationProps<"Login">) => {
-  const [data, setData] = useState(null)
+  const [details, setDetails] = useState(null)
   const [userData, setUserData] = useState([])
   const [name, setName] = useState('')
   const [password, setPassword] = useState('')
@@ -22,8 +22,8 @@ const Login = ({ navigation }: AuthNavigationProps<"Login">) => {
 
         const result = await response.json();
         const results = result.users
-        const filteredData = Array.isArray(results) ? results.filter((item: { id: number; }) => item.id === data?.id) : [];
-
+        const filteredData = Array.isArray(results) ? results.filter((item: { id: number; }) => item.id === details?.id) : [];
+        AsyncStorage.setItem('activeDetails', JSON.stringify(filteredData))
         setUserData(filteredData);
         console.log("object", filteredData)
       } catch (error) {
@@ -32,7 +32,7 @@ const Login = ({ navigation }: AuthNavigationProps<"Login">) => {
     };
 
     fetchData();
-  }, [data]);
+  }, [details]);
 
   const loginApi = () => {
     let payload = {
@@ -43,8 +43,10 @@ const Login = ({ navigation }: AuthNavigationProps<"Login">) => {
     axios.post('https://dummyjson.com/auth/login', payload)
       .then(response => {
         const data = response.data
+        setDetails(data)
+        console.log(data)
         AsyncStorage.setItem('activeUser', JSON.stringify(data))
-        AsyncStorage.setItem('activeUsers', JSON.stringify(userData))
+
         navigation.dispatch(CommonActions.reset({
           index: 0,
           routes: [
@@ -64,16 +66,15 @@ const Login = ({ navigation }: AuthNavigationProps<"Login">) => {
 
   return (
     <View style={{ alignItems: 'center', justifyContent: "center", flex: 1, backgroundColor: 'lightgrey' }}>
-      <Text style={{ fontSize: 40, fontFamily: 'ChivoMono-Bold' }}>
+      <Text style={{ fontSize: 40, }}>
         Welcome
       </Text>
       <Text
         style={{
           fontSize: 16,
           marginBottom: 20,
-          fontFamily: 'ChivoMono-Thin'
         }}>
-        Login to your account{data?.id}
+        Login to your account
       </Text>
       <TextInput
         style={styles.input}

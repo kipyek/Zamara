@@ -1,24 +1,47 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StyleSheet, Text, View, Image } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { Menu, MenuItem, MenuDivider } from 'react-native-material-menu';
 import { MaterialIcons } from "@expo/vector-icons"
 import { CommonActions } from '@react-navigation/native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Home = ({ route, navigation }: any) => {
   // const { item } = route.params
   const [visible, setVisible] = useState(false);
-  const [token, setToken] = useState(null)
+  const [lName, setLName] = useState([]);
+  const [fName, setFName] = useState([]);
+  const [age, setAge] = useState([]);
+  const [gender, setGender] = useState([]);
+  const [email, setEmail] = useState([]);
+  const [phone, setPhone] = useState([]);
+  const [birth, setBirth] = useState([]);
+  const [group, setGroup] = useState([]);
+  const [height, setHeight] = useState([]);
+  const [weight, setWeight] = useState([]);
+  const [eye, setEye] = useState([]);
 
   useEffect(() => {
-    AsyncStorage.getItem('activeUser').then(value => {
+    AsyncStorage.getItem('activeDetails').then(value => {
       let parsed = JSON.parse(value);
-      setToken(parsed.token);
+      setFName(parsed[0].firstName);
+      setLName(parsed[0].lastName);
+      setAge(parsed[0].age);
+      setGender(parsed[0].gender);
+      setEmail(parsed[0].email);
+      setPhone(parsed[0].phone);
+      setBirth(parsed[0].birthDate);
+      setGroup(parsed[0].bloodGroup);
+      setHeight(parsed[0].height);
+      setWeight(parsed[0].weight);
+      setEye(parsed[0].eyeColor);
+      console.log("Dash1234", parsed)
+
     }).catch(error => {
       console.log(error)
     }).catch(error => {
       console.log(error)
     })
+
   }, []);
 
   const hideMenu = () => setVisible(false);
@@ -78,54 +101,54 @@ const Home = ({ route, navigation }: any) => {
       <View style={styles.content}>
         <View style={styles.body}>
           <Text>Welcome</Text>
-          <Text style={styles.labels}> Medhurst Smitham,</Text>
+          <Text style={styles.labels}> {fName} {lName},</Text>
         </View>
 
         <Text>Your profile details is as below:</Text>
 
         <View style={styles.body}>
           <Text style={styles.labels}>Age: </Text>
-          <Text>26</Text>
+          <Text>{age}</Text>
         </View>
 
         <View style={styles.body}>
           <Text style={styles.labels}>Gender: </Text>
-          <Text>Male</Text>
+          <Text>{gender}</Text>
         </View>
 
         <View style={styles.body}>
           <Text style={styles.labels}>Email: </Text>
-          <Text style={styles.email}>deniskipyegon88@gmail.com</Text>
+          <Text style={styles.email}>{email}</Text>
         </View>
 
         <View style={styles.body}>
           <Text style={styles.labels}>Phone: </Text>
-          <Text>+25418477952</Text>
+          <Text>{phone}</Text>
         </View>
 
         <View style={styles.body}>
           <Text style={styles.labels}>Birth Date: </Text>
-          <Text>02/05/1999</Text>
+          <Text>{birth}</Text>
         </View>
 
         <View style={styles.body}>
           <Text style={styles.labels}>Blood Group: </Text>
-          <Text>B</Text>
+          <Text>{group}</Text>
         </View>
 
         <View style={styles.body}>
           <Text style={styles.labels}>Height: </Text>
-          <Text>1.8</Text>
+          <Text>{height}</Text>
         </View>
 
         <View style={styles.body}>
           <Text style={styles.labels}>Weight: </Text>
-          <Text>70</Text>
+          <Text>{weight}</Text>
         </View>
 
         <View style={styles.body}>
           <Text style={styles.labels}>Eye Color: </Text>
-          <Text>white</Text>
+          <Text>{eye}</Text>
         </View>
 
       </View>
