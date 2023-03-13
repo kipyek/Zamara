@@ -5,10 +5,7 @@ import Home from "./Home";
 import Staff from "./Staff";
 import Continents from "./Continents";
 
-
 const Stack = createNativeStackNavigator<HomeRoutes>();
-
-
 
 export const HomeNavigator = () => {
   return (

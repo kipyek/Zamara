@@ -1,13 +1,80 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, FlatList } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, View, FlatList, Alert } from 'react-native';
 
 export default function Staff() {
-  const [staff, setStaff] = useState([
-    { staffNumber: 1, staffName: 'John Smith', staffEmail: 'john.smith@example.com', department: 'Sales', salary: 50000 },
-    { staffNumber: 2, staffName: 'Jane Doe', staffEmail: 'jane.doe@example.com', department: 'Marketing', salary: 60000 },
-    { staffNumber: 3, staffName: 'Bob Johnson', staffEmail: 'bob.johnson@example.com', department: 'IT', salary: 70000 }
-  ]);
+  const [token, setToken] = useState(null);
+  const [staff, setStaff] = useState([]);
+  const [visible, setVisible] = useState(false)
 
+  useEffect(() => {
+    AsyncStorage.getItem('activeUser').then(value => {
+      let parsed = JSON.parse(value);
+      setToken(parsed.token);
+
+    }).catch(error => {
+      console.log(error)
+    })
+
+  }, []);
+
+  useEffect(() => {
+    handleListStaff()
+  }, [token])
+
+  const handleListStaff = async () => {
+    axios.get("https://crudcrud.com/api/b90693f84b7045b49ab189aa6b4a429a/zamara", {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    }).
+      then((response) => {
+        const data = response.data
+        setStaff(data)
+        console.log("res", response.data)
+      }).
+      catch((e) => {
+        console.log("Error", e)
+      })
+  }
+  const handleDelete = () => {
+    axios.delete(`https://crudcrud.com/api/b90693f84b7045b49ab189aa6b4a429a/zamara/${staff[0]._id}`, {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    }).
+      then((response) => {
+        console.log("Deleted", response.data)
+        handleListStaff()
+      }).
+      catch((e) => {
+        console.log("e", e)
+      })
+  }
+
+  const checking = () => {
+    Alert.alert(
+      "Warning!!",
+      "You will not be able to retrive data once deleted",
+      [
+        {
+          text: "No",
+          onPress: () => {
+            setVisible(false);
+          },
+        },
+        {
+          text: "Delete",
+          onPress: () => {
+            handleDelete()
+          },
+        }
+      ],
+      { cancelable: false }
+    );
+
+  }
   const renderStaff = ({ item }: any) => (
     <View style={styles.row}>
       <Text style={styles.cell}>{item.staffNumber}</Text>
@@ -17,7 +84,7 @@ export default function Staff() {
       <Text style={styles.cell}>{item.salary}</Text>
       <View style={styles.actionsCell}>
         <Text style={styles.actionText}>Edit</Text>
-        <Text style={styles.actionText}>Delete</Text>
+        <Text style={styles.actionText} onPress={() => checking()}>Delete</Text>
       </View>
     </View>
   );
