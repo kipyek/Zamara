@@ -2,8 +2,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, FlatList, Alert } from 'react-native';
+import { MaterialIcons, Feather, AntDesign } from "@expo/vector-icons";
+import { FAB } from 'react-native-paper'
 
-export default function Staff() {
+export default function Staff({ navigation }: any) {
   const [token, setToken] = useState(null);
   const [staff, setStaff] = useState([]);
   const [visible, setVisible] = useState(false)
@@ -20,11 +22,11 @@ export default function Staff() {
   }, []);
 
   useEffect(() => {
-    handleListStaff()
+    //handleListStaff()
   }, [token])
 
-  const handleListStaff = async () => {
-    axios.get("https://crudcrud.com/api/b90693f84b7045b49ab189aa6b4a429a/zamara", {
+  const handleListStaff = () => {
+    axios.get("https://crudcrud.com/api/6246af62dabf4cacbb73516f4aeaf26b/zamara", {
       headers: {
         'Content-Type': 'application/json'
       },
@@ -35,11 +37,11 @@ export default function Staff() {
         console.log("res", response.data)
       }).
       catch((e) => {
-        console.log("Error", e)
+        console.log("Error", e.response.data)
       })
   }
-  const handleDelete = () => {
-    axios.delete(`https://crudcrud.com/api/b90693f84b7045b49ab189aa6b4a429a/zamara/${staff[0]._id}`, {
+  const handleDelete = (item: { _id: any; }) => {
+    axios.delete(`https://crudcrud.com/api/6246af62dabf4cacbb73516f4aeaf26b/zamara/${item._id}`, {
       headers: {
         'Content-Type': 'application/json'
       },
@@ -53,7 +55,7 @@ export default function Staff() {
       })
   }
 
-  const checking = () => {
+  const checking = (item: { _id: any; }) => {
     Alert.alert(
       "Warning!!",
       "You will not be able to retrive data once deleted",
@@ -67,7 +69,7 @@ export default function Staff() {
         {
           text: "Delete",
           onPress: () => {
-            handleDelete()
+            handleDelete(item)
           },
         }
       ],
@@ -83,14 +85,18 @@ export default function Staff() {
       <Text style={styles.cell}>{item.department}</Text>
       <Text style={styles.cell}>{item.salary}</Text>
       <View style={styles.actionsCell}>
-        <Text style={styles.actionText}>Edit</Text>
-        <Text style={styles.actionText} onPress={() => checking()}>Delete</Text>
+        <Feather name="edit" size={24} color="black" style={styles.actionText} onPress={() => navigation.navigate("Update", { item: item })} />
+        <AntDesign name="delete" size={24} color="black" style={styles.actionText} onPress={() => checking(item)} />
       </View>
     </View>
   );
 
   return (
     <View style={styles.container}>
+      <View style={{ backgroundColor: '#FFA500', paddingVertical: 20, flexDirection: 'row' }}>
+        <MaterialIcons name="arrow-back" size={24} color="white" onPress={() => navigation.navigate("Home")} style={{ marginLeft: 20 }} />
+        <Text style={{ fontSize: 18, fontWeight: 'bold', color: 'white', marginLeft: 10 }} >STAFF LIST</Text>
+      </View>
       <View style={styles.header}>
         <Text style={styles.headerCell}>Staff Number</Text>
         <Text style={styles.headerCell}>Staff Name</Text>
@@ -102,9 +108,18 @@ export default function Staff() {
       <FlatList
         data={staff}
         renderItem={renderStaff}
-        keyExtractor={(item) => item.staffNumber.toString()}
+        keyExtractor={(item) => item._id}
 
       />
+
+      <View>
+        <FAB
+          style={styles.fab}
+          small
+          icon="plus"
+          onPress={() => navigation.navigate('Create')}
+        />
+      </View>
     </View>
   );
 }
@@ -113,7 +128,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    paddingTop: 40
+    paddingTop: 30
   },
   header: {
     flexDirection: 'row',
@@ -135,7 +150,7 @@ const styles = StyleSheet.create({
   },
   cell: {
     flex: 1,
-    fontSize: 10,
+    fontSize: 12,
     textAlign: 'center',
     paddingVertical: 15
   },
@@ -148,5 +163,12 @@ const styles = StyleSheet.create({
   actionText: {
     color: '#007AFF',
     fontSize: 16
-  }
+  },
+  fab: {
+    position: 'absolute',
+    margin: 16,
+    backgroundColor: 'tomato',
+    right: 0,
+    bottom: 0,
+  },
 });

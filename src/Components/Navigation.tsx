@@ -33,4 +33,6 @@ export type HomeRoutes = {
   Home: undefined;
   Staff: any;
   Continents: any;
+  Create: any;
+  Update: any
 }

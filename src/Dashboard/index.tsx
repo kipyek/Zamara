@@ -4,6 +4,8 @@ import { HomeRoutes } from "../Components/Navigation";
 import Home from "./Home";
 import Staff from "./Staff";
 import Continents from "./Continents";
+import Create from "./Staff/Create";
+import Update from "./Staff/Update";
 
 const Stack = createNativeStackNavigator<HomeRoutes>();
 
@@ -13,6 +15,8 @@ export const HomeNavigator = () => {
       <Stack.Screen name="Home" component={Home} />
       <Stack.Screen name="Staff" component={Staff} />
       <Stack.Screen name="Continents" component={Continents} />
+      <Stack.Screen name="Create" component={Create} />
+      <Stack.Screen name="Update" component={Update} />
     </Stack.Navigator>
   )
 }
