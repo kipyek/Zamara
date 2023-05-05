@@ -2,6 +2,8 @@ import { Button, StyleSheet, Text, TextInput, View } from 'react-native'
 import React, { useState } from 'react'
 import axios from 'axios'
 import { ScrollView } from 'react-native-gesture-handler'
+import * as MailComposer from 'expo-mail-composer';
+//import { SMTPClient } from 'smtpbucket';
 
 const Create = () => {
 
@@ -10,6 +12,15 @@ const Create = () => {
   const [email, setEmail] = useState('')
   const [department, setDepartment] = useState('')
   const [salary, setSalary] = useState('')
+
+  // const smtpClient = new SMTPClient({
+  //   host: 'mail.smtpbucket.com',
+  //   port: 8025,
+  //   auth: {
+  //     user: 'your-username',
+  //     pass: 'your-password',
+  //   },
+  // });
 
 
   const handleCreate = () => {
@@ -31,8 +42,28 @@ const Create = () => {
       }).
       catch((e) => {
         console.log("Error", e.response.data)
+        // const email = {
+        //   recipients: 'd.kipye@gmail.com',
+        //   subject: 'Welcome to MyApp',
+        //   body: `Hi \n\nWelcome to MyApp!`,
+        // };
+        // smtpClient.send(
+        //   email.recipients.join(','),
+        //   email.subject,
+        //   email.body,
+        //   { cc: '', bcc: '' },
+        //   {
+        //     onSuccess: () => console.log('Email sent successfully'),
+        //     onError: (error: any) => console.error(`Error sending email: ${error}`),
+        //   }
+        // );
       })
+
   }
+
+
+
+
 
   return (
     <View style={{ alignItems: 'center', justifyContent: "center", flex: 1, marginTop: 50 }}>
